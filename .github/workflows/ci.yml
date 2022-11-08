@@ -1,16 +1,16 @@
 name: CI for Angular
 on: push
 jobs:
-  unit-test:
+  services-unit-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone
+      - name: Clone repository
         uses: actions/checkout@v2
-      - name: Node Setup
+      - name: Setup node version
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - name: Install
+      - name: Install dependencies
         run: npm ci
-      - name: run tests
+      - name: Exceute tests
         run: npm run test -- --no-watch --code-coverage --browsers=ChromeHeadlessCI
