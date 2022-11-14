@@ -58,4 +58,18 @@ describe('PersonComponent', () => {
     expect(p?.textContent?.length).toBeGreaterThanOrEqual(10);
     expect(p?.textContent).toContain(1.77);
   });
+
+  it('should display the imc inside de button when it is clicked', () => {
+    component.person = new Person('Fulanito', 'Detal', 25, 120, 1.65);
+    const button: HTMLElement = fixture.debugElement.query(By.css('button.btn-imc')).nativeElement;
+    // const btnDe = fixture.debugElement.query(By.css('button.btn-imc'));
+    // const btnEl = btnDe.nativeElement;
+
+    button.click();
+    // component.calcIMC();
+    // btnDe.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    expect(button.textContent).toContain('overweight level 3');
+  });
 });
