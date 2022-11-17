@@ -62,14 +62,29 @@ describe('PersonComponent', () => {
   it('should display the imc inside de button when it is clicked', () => {
     component.person = new Person('Fulanito', 'Detal', 25, 120, 1.65);
     const button: HTMLElement = fixture.debugElement.query(By.css('button.btn-imc')).nativeElement;
-    // const btnDe = fixture.debugElement.query(By.css('button.btn-imc'));
-    // const btnEl = btnDe.nativeElement;
 
     button.click();
     // component.calcIMC();
-    // btnDe.triggerEventHandler('click', null);
     fixture.detectChanges();
 
     expect(button.textContent).toContain('overweight level 3');
+  });
+
+  it('should emit the person when the button is clicked', () => {
+    const btnDe = fixture.debugElement.query(By.css('button.btn-slt'));
+    const btnEl = btnDe.nativeElement;
+
+    let selected: Person | undefined;
+
+    component.onSelected
+      .subscribe(person => {
+        selected = person;
+      });
+
+    // btnEl.click();
+    btnDe.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    expect(selected).toEqual(component.person);
   });
 });
