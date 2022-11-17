@@ -1,6 +1,6 @@
 import faker from '@faker-js/faker';
 
-import { Product } from './product.model';
+import { Product } from '../models/product.model';
 
 export const generateOneProduct = (): Product => {
   return {

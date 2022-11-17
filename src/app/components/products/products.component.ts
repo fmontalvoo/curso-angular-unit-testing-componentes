@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from './../../models/product.model';
 
-import { ProductsService } from './../../services/product.service';
+import { ProductService } from './../../services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -12,8 +12,12 @@ export class ProductsComponent implements OnInit {
 
   products: Product[] = [];
 
+  limit = 10;
+  offset = 0;
+  status: 'init' | 'loading' | 'success' | 'error' = 'init';
+
   constructor(
-    private productsService: ProductsService
+    private productService: ProductService
   ) { }
 
   ngOnInit(): void {
@@ -21,10 +25,18 @@ export class ProductsComponent implements OnInit {
   }
 
   getAllProducts() {
-    this.productsService.getAllSimple()
-    .subscribe(products => {
-      this.products = products;
-    });
+    this.status = 'loading';
+    this.productService.getAll(this.limit, this.offset)
+      .subscribe({
+        next: products => {
+          this.status = 'success';
+          this.offset += this.limit;
+          this.products = this.products.concat(products);
+        },
+        error: e => {
+          this.status = 'error';
+        }
+      });
   }
 
 }
