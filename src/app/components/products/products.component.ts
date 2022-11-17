@@ -34,7 +34,7 @@ export class ProductsComponent implements OnInit {
           this.products = this.products.concat(products);
         },
         error: e => {
-          this.status = 'error';
+          setTimeout(() => { this.status = 'error'; }, 1000);
         }
       });
   }
