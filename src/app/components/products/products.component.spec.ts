@@ -9,6 +9,8 @@ import { ProductComponent } from '../product/product.component';
 
 import { ValueService } from 'src/app/services/value.service';
 import { ProductService } from 'src/app/services/product.service';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
 fdescribe('ProductsComponent', () => {
 
@@ -123,6 +125,37 @@ fdescribe('ProductsComponent', () => {
       expect(component.response).toEqual(mockMsg);
       expect(vs.getPromiseValue).toHaveBeenCalled();
     }));
+
+    it('should call the promise when the button is clicked', fakeAsync( () => {
+      const mockMsg = 'mock message';
+      vs.getPromiseValue.and.returnValue(Promise.resolve(mockMsg));
+
+      const buttonDebug: DebugElement = fixture.debugElement.query(By.css('button.btn-call'));
+      const button = buttonDebug.nativeElement;
+      // button.click();
+      buttonDebug.triggerEventHandler('click', null);
+      tick();
+      fixture.detectChanges();
+
+      expect(component.response).toEqual(mockMsg);
+      expect(vs.getPromiseValue).toHaveBeenCalled();
+    }));
+
+    it('should call the promise when the button is clicked and display the message', fakeAsync(() => {
+      const mockMsg = 'mock message';
+      vs.getPromiseValue.and.returnValue(Promise.resolve(mockMsg));
+
+      const button: HTMLElement = fixture.debugElement.query(By.css('button.btn-call')).nativeElement;
+      button.click();
+      tick();
+      fixture.detectChanges();
+
+      const p: HTMLElement = fixture.debugElement.query(By.css('p.msg')).nativeElement;
+
+      expect(p.textContent).toEqual(mockMsg);
+      expect(vs.getPromiseValue).toHaveBeenCalled();
+    }));
+
   });
 
 });
