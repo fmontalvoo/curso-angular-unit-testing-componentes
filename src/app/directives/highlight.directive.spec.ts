@@ -17,7 +17,7 @@ import { HighlightDirective } from './highlight.directive';
 class HostComponent {
   color = 'green';
 }
-fdescribe('HighlightDirective from HostComponent', () => {
+describe('HighlightDirective from HostComponent', () => {
   let component: HostComponent;
   let fixture: ComponentFixture<HostComponent>;
 
