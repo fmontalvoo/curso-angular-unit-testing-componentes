@@ -1,7 +1,7 @@
 name: CI for Angular
 on: push
 jobs:
-  services-unit-test:
+  components-unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
