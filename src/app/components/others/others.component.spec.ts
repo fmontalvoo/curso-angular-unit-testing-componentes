@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HighlightDirective } from 'src/app/directives/highlight.directive';
 
 import { OthersComponent } from './others.component';
+import { HighlightDirective } from 'src/app/shared/directives/highlight.directive';
 
 describe('OthersComponent', () => {
   let component: OthersComponent;

@@ -1,25 +1,29 @@
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 import { Product } from '../models/product.model';
 
-export const generateOneProduct = (): Product => {
-  return {
+
+export const generateProduct = (): Product => {
+  return <Product>{
     id: faker.datatype.uuid(),
     title: faker.commerce.productName(),
-    price: parseInt(faker.commerce.price(), 10),
+    price: parseFloat(faker.commerce.price()),
     description: faker.commerce.productDescription(),
     category: {
       id: faker.datatype.number(),
-      name: faker.commerce.department()
+      name: faker.commerce.department(),
     },
-    images: [faker.image.imageUrl(), faker.image.imageUrl()]
+    images: [
+      faker.image.imageUrl(),
+      faker.image.imageUrl(),
+    ]
   };
 }
 
-export const generateManyProducts = (size = 10): Product[] => {
+
+export const generateProducts = (limit = 7): Product[] => {
   const products: Product[] = [];
-  for (let index = 0; index < size; index++) {
-    products.push(generateOneProduct());
-  }
+  for (let i = 0; i < limit; i++)
+    products.push(generateProduct());
   return [...products];
 }

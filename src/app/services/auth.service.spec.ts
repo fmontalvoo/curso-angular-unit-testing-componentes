@@ -12,7 +12,7 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [HttpClientTestingModule],
       providers: [
         AuthService,
         TokenService,
@@ -35,20 +35,20 @@ describe('AuthService', () => {
     it('should return a token', (doneFn) => {
       //Arrange
       const mockData: Auth = {
-        access_token: '121212'
+        access_token: 'Token.123'
       };
-      const email = 'nico@gmail.com';
+      const email = 'fgmo@gmail.com';
       const password = '1212';
       //Act
       authService.login(email, password)
-      .subscribe((data)=> {
-        //Assert
-        expect(data).toEqual(mockData);
-        doneFn();
-      });
+        .subscribe((data) => {
+          //Assert
+          expect(data).toEqual(mockData);
+          doneFn();
+        });
 
       // http config
-      const url = `${environment.API_URL}/api/v1/auth/login`;
+      const url = `${environment.api_url}/v1/auth/login`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
     });
@@ -56,23 +56,23 @@ describe('AuthService', () => {
     it('should call to saveToken', (doneFn) => {
       //Arrange
       const mockData: Auth = {
-        access_token: '121212'
+        access_token: 'Token.123'
       };
-      const email = 'nico@gmail.com';
+      const email = 'fgmo@gmail.com';
       const password = '1212';
       spyOn(tokenService, 'saveToken').and.callThrough();
       //Act
       authService.login(email, password)
-      .subscribe((data)=> {
-        //Assert
-        expect(data).toEqual(mockData);
-        expect(tokenService.saveToken).toHaveBeenCalledTimes(1);
-        expect(tokenService.saveToken).toHaveBeenCalledOnceWith('121212');
-        doneFn();
-      });
+        .subscribe((data) => {
+          //Assert
+          expect(data).toEqual(mockData);
+          expect(tokenService.saveToken).toHaveBeenCalledTimes(1);
+          expect(tokenService.saveToken).toHaveBeenCalledOnceWith('Token.123');
+          doneFn();
+        });
 
       // http config
-      const url = `${environment.API_URL}/api/v1/auth/login`;
+      const url = `${environment.api_url}/v1/auth/login`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
     })

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from './../../models/product.model';
 
-import { ValueService } from './../../services/value.service';
-import { ProductService } from './../../services/product.service';
+import { Product } from 'src/app/models/product.model';
+
+import { ProductService } from 'src/app/services/product.service';
+import { ValueService } from 'src/app/services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -10,7 +11,6 @@ import { ProductService } from './../../services/product.service';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
-
   products: Product[] = [];
 
   limit = 10;
@@ -44,7 +44,7 @@ export class ProductsComponent implements OnInit {
   }
 
   async callPromise() {
-    const res = await this.valueService.getPromiseValue();
+    const res = await this.valueService.getValueAsPromise();
     this.response = res;
   }
 

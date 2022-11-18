@@ -1,5 +1,4 @@
-import { TestBed } from '@angular/core/testing';
-
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { ValueService } from './value.service';
 
 describe('ValueService', () => {
@@ -7,54 +6,58 @@ describe('ValueService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ ValueService ]
+      providers: [ValueService]
     });
     service = TestBed.inject(ValueService);
   });
 
-  it('should be create', () => {
+  it('Should be created', () => {
     expect(service).toBeTruthy();
   });
 
   describe('Tests for getValue', () => {
-    it('should return "my value"', () => {
-      expect(service.getValue()).toBe('my value');
+    it('Should return the value', () => {
+      expect(service.getValue()).toBe('Valor');
     });
+
+    it('Should return the value from Promise using doneFn', (doneFn) => { // Usar doneFn cuando se trabaja con callbacks.
+      service.getValueAsPromise()
+        .then(value => {
+          expect(value).toBe('Valor');
+          doneFn();
+        });
+    });
+
+    it('Should return the value from Promise using async', async () => {
+      const value = await service.getValueAsPromise()
+      expect(value).toBe('Valor');
+    });
+
+    it('Should return the value from Promise using waitForAsync', waitForAsync(() => {
+      service.getValueAsPromise()
+        .then(value => {
+          expect(value).toBe('Valor');
+        });
+    }));
+
+    it('Should return the value from Observable using doneFn', (doneFn) => { // Usar doneFn cuando se trabaja con callbacks.
+      service.getValueAsObservable()
+        .subscribe(value => {
+          expect(value).toBe('Valor');
+          doneFn();
+        });
+    });
+
   });
 
   describe('Tests for setValue', () => {
-    it('should change the value', () => {
-      expect(service.getValue()).toBe('my value');
-      service.setValue('change');
-      expect(service.getValue()).toBe('change');
+    it('Should change the value', () => {
+      expect(service.getValue()).toBe('Valor');
+      service.setValue('Otro valor');
+      expect(service.getValue()).toBe('Otro valor');
     });
   });
 
-  describe('Tests for getPromiseValue', () => {
-    it('should return "promise value" from promise with then', (doneFn) => {
-      service.getPromiseValue()
-      .then((value) => {
-        // assert
-        expect(value).toBe('promise value');
-        doneFn();
-      });
-    });
-
-    it('should return "promise value" from promise using async', async () => {
-      const rta = await service.getPromiseValue();
-      expect(rta).toBe('promise value');
-    });
-  });
-
-  describe('Tests for getObservableValue', () => {
-    it('should return "observable value" from observable', (doneFn) => {
-      service.getObservableValue()
-      .subscribe((value) => {
-        // assert
-        expect(value).toBe('observable value');
-        doneFn();
-      });
-    });
-  });
-
+  // it('',()=>{});
+  // it('',()=>{});
 });
