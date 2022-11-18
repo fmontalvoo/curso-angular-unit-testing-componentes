@@ -1,21 +1,25 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { of, defer } from 'rxjs';
+import { of, defer, async } from 'rxjs';
 
-import { ProductService } from 'src/app/services/product.service';
 import { generateManyProducts } from 'src/app/data/product.mock';
 
 import { ProductsComponent } from './products.component';
 import { ProductComponent } from '../product/product.component';
 
+import { ValueService } from 'src/app/services/value.service';
+import { ProductService } from 'src/app/services/product.service';
+
 fdescribe('ProductsComponent', () => {
 
   let component: ProductsComponent;
+  let vs: jasmine.SpyObj<ValueService>;
   let ps: jasmine.SpyObj<ProductService>;
   let fixture: ComponentFixture<ProductsComponent>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('ProductService', ['getAll']);
+    const spyPs = jasmine.createSpyObj('ProductService', ['getAll']);
+    const spyVs = jasmine.createSpyObj('ValueService', ['getPromiseValue']);
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -23,7 +27,8 @@ fdescribe('ProductsComponent', () => {
         ProductComponent,
       ],
       providers: [
-        { provide: ProductService, useValue: spy }
+        { provide: ValueService, useValue: spyVs },
+        { provide: ProductService, useValue: spyPs },
       ]
     })
       .compileComponents();
@@ -32,6 +37,8 @@ fdescribe('ProductsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProductsComponent);
     component = fixture.componentInstance;
+
+    vs = TestBed.inject(ValueService) as jasmine.SpyObj<ValueService>;
 
     ps = TestBed.inject(ProductService) as jasmine.SpyObj<ProductService>;
     const products = generateManyProducts(10);
@@ -91,6 +98,31 @@ fdescribe('ProductsComponent', () => {
       expect(component.status).toEqual('error');
     }));
 
+  });
+
+  describe('test for callPromise', () => {
+    it('should call a promise with async', async () => {
+      const mockMsg = 'mock message';
+      vs.getPromiseValue.and.returnValue(Promise.resolve(mockMsg));
+
+      await component.callPromise();
+      fixture.detectChanges();
+
+      expect(component.response).toEqual(mockMsg);
+      expect(vs.getPromiseValue).toHaveBeenCalled();
+    });
+
+    it('should call a promise with fakeAsync', fakeAsync(() => {
+      const mockMsg = 'mock message';
+      vs.getPromiseValue.and.returnValue(Promise.resolve(mockMsg));
+
+      component.callPromise();
+      tick();
+      fixture.detectChanges();
+
+      expect(component.response).toEqual(mockMsg);
+      expect(vs.getPromiseValue).toHaveBeenCalled();
+    }));
   });
 
 });
