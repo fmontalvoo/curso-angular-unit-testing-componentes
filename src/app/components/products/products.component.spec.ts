@@ -12,7 +12,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-fdescribe('ProductsComponent', () => {
+describe('ProductsComponent', () => {
 
   let component: ProductsComponent;
   let vs: jasmine.SpyObj<ValueService>;
